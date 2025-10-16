@@ -2,7 +2,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { pool } from './db/pool';
+import { pool } from './db/pool.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const server = http.createServer(async (req, res) => {
