@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
     const filePath = req.url === '/' ? '/index.html' : req.url;
 
     // Полный путь к файлу в папке public
-    const fullPath = path.join(__dirname, 'public', filePath);
+    const fullPath = path.join(__dirname, '../frontend/public', filePath);
 
     // Читаем файл асинхронно
     fs.readFile(fullPath, (err, data) => {
