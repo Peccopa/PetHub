@@ -13,6 +13,19 @@
 // Сервер стартует на localhost:3000 локально.
 // На Render будет доступен через публичный URL.
 
+import pkg from 'pg';
+const { Pool } = pkg;
+
+// Используем переменные окружения для конфиденциальных данных
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+
 // Импортируем модуль http, который позволяет создавать HTTP-сервер
 import http from 'http';
 
