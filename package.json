@@ -1,0 +1,25 @@
+{
+  "name": "pethub",
+  "version": "1.0.0",
+  "description": "pethub project",
+  "keywords": [
+    "pethub",
+    "pet-project"
+  ],
+  "homepage": "https://github.com/Peccopa/PetHub#readme",
+  "bugs": {
+    "url": "https://github.com/Peccopa/PetHub/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peccopa/PetHub.git"
+  },
+  "license": "ISC",
+  "author": "Peccopa",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
