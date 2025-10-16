@@ -1,8 +1,13 @@
 {
-  "name": "pethub-frontend",
+  "name": "frontend",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": ""
+    "start": "live-server --port=8080",
+    "build": "echo \"No build step yet\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
   }
 }

@@ -18,7 +18,6 @@
   "author": "Peccopa",
   "type": "module",
   "scripts": {
-    "start": "node backend/server.js",
-    "test": "node backend/utils/test-db.js"
+    "start": "node backend/server.js"
   }
 }
