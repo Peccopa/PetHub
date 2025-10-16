@@ -13,6 +13,7 @@
 // Сервер стартует на localhost:3000 локально.
 // На Render будет доступен через публичный URL.
 
+import 'dotenv/config'; // автоматически загружает переменные из .env в process.env
 import pkg from 'pg';
 const { Pool } = pkg;
 
@@ -24,7 +25,6 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-
 
 // Импортируем модуль http, который позволяет создавать HTTP-сервер
 import http from 'http';
