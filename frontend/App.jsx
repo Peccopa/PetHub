@@ -1,11 +1,30 @@
-import React from 'react';
-import './styles.css';
+import React, { useState } from 'react';
+import { Header } from './components/Header';
+import { Main } from './components/Main';
+import { Footer } from './components/Footer';
+import { Games } from './components/Games';
+import { Pets } from './components/Pets';
 
-export default function App() {
+export const App = () => {
+  const [activePage, setActivePage] = useState('home');
+
+  let content;
+  switch (activePage) {
+    case 'pets':
+      content = <Pets />;
+      break;
+    case 'games':
+      content = <Games />;
+      break;
+    default:
+      content = <Main />;
+  }
+
   return (
-    <div>
-      <h1>PetHub</h1>
-      <p>Добро пожаловать в демонстрационный проект!</p>
-    </div>
+    <>
+      <Header onNavigate={setActivePage} active={activePage} />
+      {content}
+      <Footer />
+    </>
   );
-}
+};
