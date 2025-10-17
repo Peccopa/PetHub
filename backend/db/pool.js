@@ -2,8 +2,14 @@ import dotenv from 'dotenv';
 import path from 'path';
 import pkg from 'pg';
 const { Pool } = pkg;
+import 'dotenv';
 
 const isProd = process.env.NODE_ENV === 'production';
+
+// dotenv.config({
+//   path: isProd ? path.resolve('../.env.prod') : path.resolve('../.env.local'),
+// });
+
 // export const pool = new Pool({
 //   host: process.env.DB_HOST,
 //   port: Number(process.env.DB_PORT),
@@ -12,10 +18,6 @@ const isProd = process.env.NODE_ENV === 'production';
 //   database: process.env.DB_NAME,
 //   ssl: isProd ? { rejectUnauthorized: false } : false,
 // });
-
-dotenv.config({
-  path: isProd ? path.resolve('../.env.prod') : path.resolve('../.env.local'),
-});
 
 export const pool = new Pool({
   host: process.env.DB_HOST,
