@@ -5,7 +5,7 @@ import Header from './Header.jsx';
 import Main from './Main.jsx';
 import Footer from './Footer.jsx';
 
-export default function App() {
+export default function AppAdmin() {
   return (
     <div className="crt">
       {' '}
