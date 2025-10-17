@@ -27,12 +27,12 @@ export const pool = new Pool({
 // });
 
 // Проверим соединение при старте
-(async () => {
-  try {
-    const client = await pool.connect();
-    console.log('✅ Database connected successfully');
-    client.release();
-  } catch (err) {
-    console.error('❌ Database connection failed:', err.message);
-  }
-})();
+// (async () => {
+//   try {
+//     const client = await pool.connect();
+//     console.log('✅ Database connected successfully');
+//     client.release();
+//   } catch (err) {
+//     console.error('❌ Database connection failed:', err.message);
+//   }
+// })();
