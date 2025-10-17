@@ -7,7 +7,7 @@ import { pool } from './db/pool.js';
 
 // Путь к фронтенду
 const __dirname = path.resolve();
-const frontendPath = path.join(__dirname, '../frontend');
+const frontendPath = path.join(__dirname, '../frontend/dist');
 
 // Универсальная функция для отправки JSON-ответа
 const sendJSON = (res, data, status = 200) => {
