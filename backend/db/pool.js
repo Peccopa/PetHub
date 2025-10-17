@@ -17,3 +17,14 @@ export const pool = new Pool({
   port: Number(process.env.DB_PORT),
   ssl: isProd ? { rejectUnauthorized: false } : { rejectUnauthorized: false },
 });
+
+// Проверим соединение при старте
+(async () => {
+  try {
+    const client = await pool.connect();
+    console.log('✅ Database connected successfully');
+    client.release();
+  } catch (err) {
+    console.error('❌ Database connection failed:', err.message);
+  }
+})();

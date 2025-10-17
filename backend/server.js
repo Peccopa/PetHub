@@ -1,65 +1,100 @@
-import 'dotenv/config';
+// Простенький сервер без Express — используем Node.js стандартные модули
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-import { pool } from './db/pool.js'; // импорт подключения к Postgres
+import url from 'url';
+import { pool } from './db/pool.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Путь к фронтенду
+const __dirname = path.resolve();
+const frontendPath = path.join(__dirname, '../frontend');
+
+// Универсальная функция для отправки JSON-ответа
+const sendJSON = (res, data, status = 200) => {
+  res.writeHead(status, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(data));
+};
+
+// Создаём HTTP-сервер
 
 const server = http.createServer(async (req, res) => {
-  // --- GET index.html ---
-  if (req.method === 'GET' && req.url === '/') {
-    const fullPath = path.join(__dirname, '../frontend/index.html');
-    fs.readFile(fullPath, (err, data) => {
-      if (err) {
-        res.writeHead(404);
-        res.end('Not found');
-      } else {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(data);
-      }
-    });
+  const parsedUrl = url.parse(req.url, true);
+
+  // --- CORS ---
+  const allowedOrigins = [
+    'http://localhost:8080',
+    'https://pethub.onrender.com',
+    'https://pethub-o2ap.onrender.com',
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
 
-  // --- GET /comments ---
-  else if (req.method === 'GET' && req.url === '/comments') {
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  // === 1️⃣ API: получить комментарии ===
+  if (req.method === 'GET' && parsedUrl.pathname === '/comments') {
     try {
-      const { rows } = await pool.query('SELECT * FROM comments ORDER BY id DESC');
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(rows));
+      const { rows } = await pool.query(
+        'SELECT * FROM comments ORDER BY id DESC'
+      );
+      sendJSON(res, rows);
     } catch (err) {
-      res.writeHead(500);
-      res.end(JSON.stringify({ error: err.message }));
+      sendJSON(res, { error: err.message }, 500);
     }
+    return;
   }
 
-  // --- POST /comments ---
-  else if (req.method === 'POST' && req.url === '/comments') {
+  // === 2️⃣ API: добавить комментарий ===
+  if (req.method === 'POST' && parsedUrl.pathname === '/comments') {
     let body = '';
     req.on('data', (chunk) => (body += chunk));
     req.on('end', async () => {
       try {
-        const { author, text } = JSON.parse(body);
-        const { rows } = await pool.query(
-          'INSERT INTO comments(author, text) VALUES($1, $2) RETURNING *',
-          [author || 'Гость', text]
-        );
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(rows[0]));
+        const { text } = JSON.parse(body);
+        await pool.query('INSERT INTO comments (text) VALUES ($1)', [text]);
+        sendJSON(res, { message: 'Comment added' });
       } catch (err) {
-        res.writeHead(500);
-        res.end(JSON.stringify({ error: err.message }));
+        sendJSON(res, { error: err.message }, 500);
       }
     });
+    return;
   }
 
-  // --- Всё остальное ---
-  else {
-    res.writeHead(404);
-    res.end();
-  }
+  // === 3️⃣ Отдаём фронтенд ===
+  let filePath = path.join(frontendPath, parsedUrl.pathname);
+  if (parsedUrl.pathname === '/')
+    filePath = path.join(frontendPath, 'index.html');
+
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('Not Found');
+    } else {
+      const ext = path.extname(filePath);
+      const type =
+        ext === '.html'
+          ? 'text/html'
+          : ext === '.js'
+          ? 'application/javascript'
+          : ext === '.css'
+          ? 'text/css'
+          : 'text/plain';
+      res.writeHead(200, { 'Content-Type': type });
+      res.end(content);
+    }
+  });
 });
 
+// PORT задаётся Render'ом или локально 3000
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
