@@ -2,35 +2,37 @@ import dotenv from 'dotenv';
 import path from 'path';
 import pkg from 'pg';
 const { Pool } = pkg;
-import 'dotenv';
 
+// Определяем, продакшен или нет
 const isProd = process.env.NODE_ENV === 'production';
 
-// dotenv.config({
-//   path: isProd ? path.resolve('../.env.prod') : path.resolve('../.env.local'),
-// });
+// ✅ Загружаем .env только в режиме разработки
+if (!isProd) {
+  dotenv.config({
+    path: path.resolve('../.env.local'),
+  });
+}
 
-// export const pool = new Pool({
-//   host: process.env.DB_HOST,
-//   port: Number(process.env.DB_PORT),
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASS,
-//   database: process.env.DB_NAME,
-//   ssl: isProd ? { rejectUnauthorized: false } : false,
-// });
-
+// ✅ Конфигурация пула
 export const pool = new Pool({
   host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT || 5432),
   user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  port: Number(process.env.DB_PORT),
-  ssl: isProd ? { rejectUnauthorized: false } : { rejectUnauthorized: false },
+  password: String(process.env.DB_PASS || ''), // обязательно строка
+  database: process.env.DB_NAME,
+  ssl: isProd ? { rejectUnauthorized: false } : false,
 });
 
-console.log(pool);
+// Логирование для отладки
+console.log('🔌 DB config:', {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  db: process.env.DB_NAME,
+  ssl: isProd,
+});
 
-// Проверим соединение при старте
+// Проверка соединения при старте
 (async () => {
   try {
     const client = await pool.connect();
