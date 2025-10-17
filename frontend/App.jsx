@@ -13,10 +13,13 @@ export const App = () => {
   }, []);
 
   // Функция получения комментариев с сервера
-  const API_URL =
-    process.env.NODE_ENV === 'production'
-      ? 'https://pethub-backend.onrender.com/comments'
-      : 'http://localhost:3000/comments';
+  // console.log(process);
+  // const API_URL =
+  //   process.env.NODE_ENV === 'production'
+  //     ? 'https://pethub-backend.onrender.com/comments'
+  //     : 'http://localhost:3000/comments';
+
+  const API_URL = `${process.env.REACT_APP_API_URL}/comments`;
 
   const fetchComments = async () => {
     try {

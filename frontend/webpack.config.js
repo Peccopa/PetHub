@@ -1,6 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import Dotenv from 'dotenv-webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +36,7 @@ export default {
     new HtmlWebpackPlugin({
       template: './index.html', // берём наш html как шаблон
     }),
+    new Dotenv(),
   ],
   resolve: {
     extensions: ['.js', '.jsx'], // чтобы можно было писать import App from './App'

@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    container_name: pethub_db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+      POSTGRES_DB: pethub
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  backend:
+    build: ./backend
+    container_name: pethub_backend
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: pethub_frontend
+    ports:
+      - '8080:80'
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
