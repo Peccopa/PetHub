@@ -20,7 +20,7 @@ export const App = () => {
   //     : 'http://localhost:3000/comments';
 
   // const API_URL = `${process.env.REACT_APP_API_URL}/comments`;
-  const API_URL = `https://pethub-o2ap.onrender.com/comments`;
+  const API_URL = `/comments`;
 
   const fetchComments = async () => {
     try {
