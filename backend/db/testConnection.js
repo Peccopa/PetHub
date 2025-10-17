@@ -1,5 +1,8 @@
 import { pool } from './pool.js';
 
+console.log(pool);
+
+
 (async () => {
   try {
     const result = await pool.query('SELECT NOW()');
