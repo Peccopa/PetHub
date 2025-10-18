@@ -19,11 +19,12 @@ export const App = () => {
   //     ? 'https://pethub-backend.onrender.com/comments'
   //     : 'http://localhost:3000/comments';
 
-  const API_URL = process.env.REACT_APP_API_URL || '';
+  // const API_URL = process.env.REACT_APP_API_URL;
+  // console.log(API_URL);
 
   const fetchComments = async () => {
     try {
-      const res = await fetch(`${API_URL}/comments`);
+      const res = await fetch('/comments');
       const data = await res.json();
       setComments(data);
     } catch (err) {
@@ -36,7 +37,7 @@ export const App = () => {
     e.preventDefault();
     if (!newComment.trim()) return;
     try {
-      await fetch(`${API_URL}/comments`, {
+      await fetch('/comments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: newComment }),
