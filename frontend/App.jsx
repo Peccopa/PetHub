@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './app.css';
+import telepood from './telepood.svg';
 
 export const App = () => {
   const [comments, setComments] = useState([]);
@@ -51,8 +52,8 @@ export const App = () => {
   return (
     <div className="container">
       <div className="image-section">
-        <img src="https://placecats.com/400/400" alt="Котёнок" />
-        <p className="caption">Маленький пушистик ждёт ваших комментариев 😺</p>
+        <img src={telepood} alt="Telepood" />
+        {/* <p className="caption">Маленький пушистик ждёт ваших комментариев 😺</p> */}
       </div>
 
       <div className="comments-section">

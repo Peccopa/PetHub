@@ -27,6 +27,15 @@ export default {
         },
       },
       {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset', // автоматически выбирает между resource и inline
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024, // < 8kb преобразуется в base64
+          },
+        },
+      },
+      {
         test: /\.css$/i, // для стилей
         use: ['style-loader', 'css-loader'],
       },
