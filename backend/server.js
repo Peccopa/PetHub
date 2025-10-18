@@ -1,4 +1,4 @@
-// Простенький сервер без Express — используем Node.js стандартные модули
+// server.js — простой Node.js сервер с поддержкой username
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
@@ -16,7 +16,6 @@ const sendJSON = (res, data, status = 200) => {
 };
 
 // Создаём HTTP-сервер
-
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
 
@@ -26,22 +25,22 @@ const server = http.createServer(async (req, res) => {
     'https://pethub.onrender.com',
     'https://pethub-o2ap.onrender.com',
   ];
-
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
 
-  // res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // OPTIONS preflight
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
     return;
   }
 
-  // === 1️⃣ API: получить комментарии ===
+  // === 1️⃣ GET /api/comments ===
   if (req.method === 'GET' && parsedUrl.pathname === '/api/comments') {
     try {
       const { rows } = await pool.query(
@@ -54,14 +53,25 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // === 2️⃣ API: добавить комментарий ===
+  // === 2️⃣ POST /api/comments ===
   if (req.method === 'POST' && parsedUrl.pathname === '/api/comments') {
     let body = '';
     req.on('data', (chunk) => (body += chunk));
     req.on('end', async () => {
       try {
-        const { text } = JSON.parse(body);
-        await pool.query('INSERT INTO comments (text) VALUES ($1)', [text]);
+        const { text, username } = JSON.parse(body);
+
+        // Проверяем, что оба поля заполнены
+        if (!text || !username) {
+          sendJSON(res, { error: 'Text and username are required' }, 400);
+          return;
+        }
+
+        await pool.query(
+          'INSERT INTO comments (username, text) VALUES ($1, $2)',
+          [username, text]
+        );
+
         sendJSON(res, { message: 'Comment added' });
       } catch (err) {
         sendJSON(res, { error: err.message }, 500);
@@ -88,6 +98,8 @@ const server = http.createServer(async (req, res) => {
           ? 'application/javascript'
           : ext === '.css'
           ? 'text/css'
+          : ext === '.svg'
+          ? 'image/svg+xml'
           : 'text/plain';
       res.writeHead(200, { 'Content-Type': type });
       res.end(content);

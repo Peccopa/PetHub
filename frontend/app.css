@@ -36,11 +36,17 @@ body {
 }
 
 .comments-section {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* gap: 20px; */
   flex: 1;
   padding: 20px;
 }
 
 .comments-list {
+  display: flex;
+  flex-direction: column-reverse;
+
   max-height: 300px;
   overflow-y: auto;
   border-bottom: 1px solid #ccc;
@@ -58,6 +64,12 @@ body {
 .comment-form {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.comment-form input {
+  padding: 5px;
+  font-family: inherit;
 }
 
 .comment-form textarea {
@@ -69,7 +81,7 @@ body {
 }
 
 .comment-form button {
-  background: #0077ff;
+  background: #0d84c7;
   color: white;
   border: none;
   padding: 10px;
@@ -78,6 +90,9 @@ body {
   transition: background 0.2s;
 }
 
-.comment-form button:hover {
-  background: #005fcc;
+/* Ховер только для устройств с указателем */
+@media (hover: hover) and (pointer: fine) {
+  .comment-form button:hover {
+    background: #0d83c7bf;
+  }
 }
