@@ -20,25 +20,25 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
 
   // --- CORS ---
-  const allowedOrigins = [
-    'http://localhost:8080',
-    'https://pethub.onrender.com',
-    'https://pethub-o2ap.onrender.com',
-  ];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
+  // const allowedOrigins = [
+  //   'http://localhost:8080',
+  //   'https://pethub.onrender.com',
+  //   'https://pethub-o2ap.onrender.com',
+  // ];
+  // const origin = req.headers.origin;
+  // if (allowedOrigins.includes(origin)) {
+  //   res.setHeader('Access-Control-Allow-Origin', origin);
+  // }
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // OPTIONS preflight
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204);
-    res.end();
-    return;
-  }
+  // // OPTIONS preflight
+  // if (req.method === 'OPTIONS') {
+  //   res.writeHead(204);
+  //   res.end();
+  //   return;
+  // }
 
   // === 1️⃣ GET /api/comments ===
   if (req.method === 'GET' && parsedUrl.pathname === '/api/comments') {
