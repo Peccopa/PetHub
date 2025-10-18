@@ -13,14 +13,6 @@ export const App = () => {
   }, []);
 
   // Функция получения комментариев с сервера
-  // console.log(process);
-  // const API_URL =
-  //   process.env.NODE_ENV === 'production'
-  //     ? 'https://pethub-backend.onrender.com/api/comments'
-  //     : 'http://localhost:3000/api/comments';
-
-  // const API_URL = process.env.REACT_APP_API_URL;
-  // console.log(API_URL);
 
   const fetchComments = async () => {
     try {
@@ -78,6 +70,12 @@ export const App = () => {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Напишите свой комментарий..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // предотвращаем перенос строки
+                handleSubmit(e); // вызываем сабмит формы
+              }
+            }}
           ></textarea>
           <button type="submit">Запостить комментарий</button>
         </form>
