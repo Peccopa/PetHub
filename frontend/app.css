@@ -36,9 +36,6 @@ body {
 }
 
 .comments-section {
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* gap: 20px; */
   flex: 1;
   padding: 20px;
 }
@@ -67,8 +64,19 @@ body {
   gap: 10px;
 }
 
-.comment-form input {
+.comment-form .inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-form input:first-child {
   padding: 5px;
+  font-family: inherit;
+}
+
+.comment-form input:last-child {
+  /* padding: 5px; */
   font-family: inherit;
 }
 

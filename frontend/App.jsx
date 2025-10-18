@@ -5,8 +5,13 @@ import telepood from './telepood.svg';
 export const App = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [username, setUsername] = useState(''); // новое состояние для имени
+  const [username, setUsername] = useState(
+    localStorage.getItem('username') || ''
+  ); // новое состояние для имени
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [color, setColor] = useState(
+    localStorage.getItem('color') || '#333333'
+  ); // цвет по умолчанию
 
   // Загрузка комментариев
   const fetchComments = async () => {
@@ -35,7 +40,7 @@ export const App = () => {
       await fetch('/api/comments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: newComment, username }),
+        body: JSON.stringify({ text: newComment, username, color }),
       });
       setNewComment('');
       fetchComments();
@@ -59,7 +64,8 @@ export const App = () => {
           {comments.length > 0 ? (
             comments.map((c) => (
               <div key={c.id} className="comment">
-                <strong>{c.username || 'Аноним'}:</strong> 🗨️ {c.text}
+                <strong>{c.username || 'Аноним'}:</strong> 🗨️{' '}
+                <span style={{ color: c.color || '#333333' }}>{c.text}</span>
               </div>
             ))
           ) : (
@@ -68,18 +74,35 @@ export const App = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="comment-form">
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Ваше имя"
-            disabled={isSubmitting}
-            required
-          />
+          <div className="inputs">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                localStorage.setItem('username', e.target.value);
+              }}
+              placeholder="Ваше имя"
+              // style={{ color: color }}
+              disabled={isSubmitting}
+              required
+            />
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => {
+                setColor(e.target.value);
+                localStorage.setItem('color', e.target.value);
+              }}
+              title="Выберите цвет комментария"
+              disabled={isSubmitting}
+            />
+          </div>
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Напишите свой комментарий..."
+            style={{ color: color }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();

@@ -59,7 +59,7 @@ const server = http.createServer(async (req, res) => {
     req.on('data', (chunk) => (body += chunk));
     req.on('end', async () => {
       try {
-        const { text, username } = JSON.parse(body);
+        const { text, username, color } = JSON.parse(body);
 
         // Проверяем, что оба поля заполнены
         if (!text || !username) {
@@ -68,8 +68,8 @@ const server = http.createServer(async (req, res) => {
         }
 
         await pool.query(
-          'INSERT INTO comments (username, text) VALUES ($1, $2)',
-          [username, text]
+          'INSERT INTO comments (username, text, color) VALUES ($1, $2, $3)',
+          [username, text, color || '#333333']
         );
 
         sendJSON(res, { message: 'Comment added' });
