@@ -4,12 +4,9 @@ import './app.css';
 export const App = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false); // флаг отправки
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchComments();
-  }, []);
-
+  // Функция загрузки комментариев
   const fetchComments = async () => {
     try {
       const res = await fetch('/api/comments');
@@ -20,9 +17,20 @@ export const App = () => {
     }
   };
 
+  // Первый рендер + периодическое обновление каждые 5 секунд
+  useEffect(() => {
+    fetchComments(); // сразу загружаем комментарии
+
+    const interval = setInterval(() => {
+      fetchComments();
+    }, 5000); // 5000 мс = 5 секунд
+
+    return () => clearInterval(interval); // очистка при размонтировании
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim() || isSubmitting) return; // блокируем дубли
+    if (!newComment.trim() || isSubmitting) return;
 
     setIsSubmitting(true);
     try {
@@ -32,7 +40,7 @@ export const App = () => {
         body: JSON.stringify({ text: newComment }),
       });
       setNewComment('');
-      fetchComments();
+      fetchComments(); // обновляем комментарии сразу после отправки
     } catch (err) {
       console.error('Ошибка отправки комментария:', err);
     } finally {
@@ -69,11 +77,11 @@ export const App = () => {
             placeholder="Напишите свой комментарий..."
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // предотвращаем перенос строки
-                handleSubmit(e); // вызываем сабмит
+                e.preventDefault();
+                handleSubmit(e);
               }
             }}
-            disabled={isSubmitting} // блокируем ввод во время отправки
+            disabled={isSubmitting}
           ></textarea>
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Отправка...' : 'Запостить комментарий'}
