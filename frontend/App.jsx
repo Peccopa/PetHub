@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css';
+import './app.css';
 
 export const App = () => {
   // comments — список всех комментариев
@@ -19,12 +19,11 @@ export const App = () => {
   //     ? 'https://pethub-backend.onrender.com/comments'
   //     : 'http://localhost:3000/comments';
 
-  const API_URL = process.env.REACT_APP_API_URL;
-  // const API_URL = `/comments`;
+  const API_URL = process.env.REACT_APP_API_URL || '';
 
   const fetchComments = async () => {
     try {
-      const res = await fetch(API_URL);
+      const res = await fetch(`${API_URL}/comments`);
       const data = await res.json();
       setComments(data);
     } catch (err) {
@@ -37,7 +36,7 @@ export const App = () => {
     e.preventDefault();
     if (!newComment.trim()) return;
     try {
-      await fetch(API_URL, {
+      await fetch(`${API_URL}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: newComment }),
