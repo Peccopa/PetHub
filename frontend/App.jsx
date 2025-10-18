@@ -16,15 +16,15 @@ export const App = () => {
   // console.log(process);
   // const API_URL =
   //   process.env.NODE_ENV === 'production'
-  //     ? 'https://pethub-backend.onrender.com/comments'
-  //     : 'http://localhost:3000/comments';
+  //     ? 'https://pethub-backend.onrender.com/api/comments'
+  //     : 'http://localhost:3000/api/comments';
 
   // const API_URL = process.env.REACT_APP_API_URL;
   // console.log(API_URL);
 
   const fetchComments = async () => {
     try {
-      const res = await fetch('/comments');
+      const res = await fetch('/api/comments');
       const data = await res.json();
       setComments(data);
     } catch (err) {
@@ -37,7 +37,7 @@ export const App = () => {
     e.preventDefault();
     if (!newComment.trim()) return;
     try {
-      await fetch('/comments', {
+      await fetch('/api/comments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: newComment }),

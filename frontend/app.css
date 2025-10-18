@@ -7,6 +7,7 @@ body {
 
 .container {
   display: flex;
+  flex-wrap: wrap;
   max-width: 1000px;
   margin: 40px auto;
   background: white;
@@ -16,6 +17,7 @@ body {
 }
 
 .image-section {
+  min-width: 320px;
   flex: 1;
   background: #e8e8e8;
   text-align: center;

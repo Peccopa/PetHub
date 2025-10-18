@@ -1,13 +1,14 @@
-# Используем образ Nginx для фронта
 FROM nginx:alpine
 
 # Удаляем дефолтный контент
 RUN rm -rf /usr/share/nginx/html/*
 
-# Копируем билд проекта в папку Nginx
+# Копируем билд проекта
 COPY dist/ /usr/share/nginx/html/
 
-# Открываем порт для фронтенда
+# Копируем наш конфиг nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# открываем порт для фронтенда
 EXPOSE 80
 
-# Nginx запускается автоматически

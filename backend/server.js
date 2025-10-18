@@ -42,7 +42,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // === 1️⃣ API: получить комментарии ===
-  if (req.method === 'GET' && parsedUrl.pathname === '/comments') {
+  if (req.method === 'GET' && parsedUrl.pathname === '/api/comments') {
     try {
       const { rows } = await pool.query(
         'SELECT * FROM comments ORDER BY id DESC'
@@ -55,7 +55,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // === 2️⃣ API: добавить комментарий ===
-  if (req.method === 'POST' && parsedUrl.pathname === '/comments') {
+  if (req.method === 'POST' && parsedUrl.pathname === '/api/comments') {
     let body = '';
     req.on('data', (chunk) => (body += chunk));
     req.on('end', async () => {
