@@ -83,6 +83,7 @@ export const App = () => {
                 localStorage.setItem('username', e.target.value);
               }}
               placeholder="Ваше имя"
+              textarea maxLength="20"
               // style={{ color: color }}
               disabled={isSubmitting}
               required
@@ -101,6 +102,7 @@ export const App = () => {
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            textarea maxLength="1000"
             placeholder="Напишите свой комментарий..."
             style={{ color: color }}
             onKeyDown={(e) => {
