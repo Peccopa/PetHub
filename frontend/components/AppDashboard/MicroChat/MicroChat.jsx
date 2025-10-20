@@ -5,7 +5,7 @@ const MicrochatStatus = () => {
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/status');
+      const res = await fetch('/api/status');
       const json = await res.json();
       setStatus(json);
     } catch (err) {
