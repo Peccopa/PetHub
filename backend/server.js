@@ -19,26 +19,35 @@ const sendJSON = (res, data, status = 200) => {
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
 
-  // --- CORS ---
-  // const allowedOrigins = [
-  //   'http://localhost:8080',
-  //   'https://pethub.onrender.com',
-  //   'https://pethub-o2ap.onrender.com',
-  // ];
-  // const origin = req.headers.origin;
-  // if (allowedOrigins.includes(origin)) {
-  //   res.setHeader('Access-Control-Allow-Origin', origin);
-  // }
+  // === GET /api/status ===
+  if (req.method === 'GET' && parsedUrl.pathname === '/api/status') {
+    try {
+      // Проверяем доступность базы и количество комментариев
+      const { rows } = await pool.query(
+        'SELECT COUNT(*) AS count FROM comments'
+      );
+      const messagesCount = parseInt(rows[0].count, 10);
 
-  // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  // // OPTIONS preflight
-  // if (req.method === 'OPTIONS') {
-  //   res.writeHead(204);
-  //   res.end();
-  //   return;
-  // }
+      sendJSON(res, {
+        service: 'microchat',
+        status: 'ok',
+        messagesCount,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (err) {
+      sendJSON(
+        res,
+        {
+          service: 'microchat',
+          status: 'error',
+          error: err.message,
+          timestamp: new Date().toISOString(),
+        },
+        500
+      );
+    }
+    return;
+  }
 
   // === 1️⃣ GET /api/comments ===
   if (req.method === 'GET' && parsedUrl.pathname === '/api/comments') {

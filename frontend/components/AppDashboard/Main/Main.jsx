@@ -1,6 +1,7 @@
 import React from 'react';
 import './Main.css';
 import { AppComments } from '../../AppComments/AppComments';
+import MicrochatStatus from '../MicroChat/MicroChat';
 
 const Main = () => {
   return (
@@ -21,6 +22,7 @@ const Main = () => {
           <h4>Ошибки</h4>
           <p>2 критические</p>
         </div>
+          <MicrochatStatus />
       </div>
       <AppComments />
     </main>
