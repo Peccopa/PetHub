@@ -2,13 +2,13 @@ import React from 'react';
 import './Main.css';
 import { AppComments } from '../../AppComments/AppComments';
 import MicrochatStatus from '../MicroChat/MicroChat';
+import RenderServices from '../RenderServices/RenderServices';
 
 const Main = () => {
   return (
     <main className="main">
       <h2>Обзор системы</h2>
       <p>Здесь можно отобразить метрики, графики или статистику приложения.</p>
-
       <div className="cards">
         <div className="card">
           <h4>Активные пользователи</h4>
@@ -22,7 +22,8 @@ const Main = () => {
           <h4>Ошибки</h4>
           <p>2 критические</p>
         </div>
-          <MicrochatStatus />
+        <MicrochatStatus />
+        <RenderServices />
       </div>
       <AppComments />
     </main>

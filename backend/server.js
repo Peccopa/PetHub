@@ -4,10 +4,12 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 import { pool } from './db/pool.js';
+import https from 'https';
 
 // Путь к фронтенду
 const __dirname = path.resolve();
 const frontendPath = path.join(__dirname, '../frontend/dist');
+const API_KEY = process.env.RENDER_API_KEY;
 
 // Универсальная функция для отправки JSON-ответа
 const sendJSON = (res, data, status = 200) => {
@@ -18,6 +20,33 @@ const sendJSON = (res, data, status = 200) => {
 // Создаём HTTP-сервер
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
+
+  //====получаем статус сервисов Рендера======
+  if (req.method === 'GET' && parsedUrl.pathname === '/api/render-services') {
+    const options = {
+      hostname: 'api.render.com',
+      path: '/v1/services',
+      method: 'GET',
+      headers: { Authorization: `Bearer ${process.env.RENDER_API_KEY}` },
+    };
+
+    const apiReq = https.request(options, (apiRes) => {
+      let data = '';
+      apiRes.on('data', (chunk) => (data += chunk));
+      apiRes.on('end', () => {
+        try {
+          const json = JSON.parse(data); // безопасно парсим JSON
+          sendJSON(res, json, 200);
+        } catch (err) {
+          sendJSON(res, { error: 'Invalid JSON from Render API' }, 500);
+        }
+      });
+    });
+
+    apiReq.on('error', (err) => sendJSON(res, { error: err.message }, 500));
+    apiReq.end();
+    return;
+  }
 
   // === GET /api/status ===
   if (req.method === 'GET' && parsedUrl.pathname === '/api/status') {
