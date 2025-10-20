@@ -5,6 +5,12 @@
   border-right: 1px solid var(--color-primary-light);
 }
 
+@media (width < 640px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+
 .sidebar h3 {
   color: var(--color-primary);
   margin-bottom: 1rem;

@@ -4,6 +4,12 @@
   overflow-y: auto;
 }
 
+@media (width < 640px) {
+  .main {
+    padding: 0.5rem;
+  }
+}
+
 .main h2 {
   color: var(--color-primary);
 }
