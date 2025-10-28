@@ -31,7 +31,7 @@ export const Pets = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Данные формы:', formData);
+    // console.log('Данные формы:', formData);
 
     // Пример отправки на сервер (сервер пока не реализован)
     // await fetch('/api/pets', {

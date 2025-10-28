@@ -34,7 +34,7 @@ const RenderServices = () => {
     try {
       const res = await fetch('/api/render-services');
       const data = await res.json();
-      console.log('Render API data:', data);
+      // console.log('Render API data:', data);
 
       const servicesArray = Array.isArray(data)
         ? data.map((s) => s.service)
