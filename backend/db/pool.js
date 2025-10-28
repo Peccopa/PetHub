@@ -24,13 +24,13 @@ export const pool = new Pool({
 });
 
 // Логирование для отладки
-console.log('🔌 DB config:', {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  db: process.env.DB_NAME,
-  ssl: isProd,
-});
+// console.log('🔌 DB config:', {
+//   host: process.env.DB_HOST,
+//   port: process.env.DB_PORT,
+//   user: process.env.DB_USER,
+//   db: process.env.DB_NAME,
+//   ssl: isProd,
+// });
 
 // Проверка соединения при старте
 (async () => {

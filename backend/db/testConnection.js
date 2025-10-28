@@ -1,6 +1,6 @@
 import { pool } from './pool.js';
 
-console.log(pool);
+// console.log(pool);
 
 
 (async () => {
